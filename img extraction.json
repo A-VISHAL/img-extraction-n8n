@@ -1,0 +1,159 @@
+{
+  "name": "img extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aadhaar-upload",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        -16
+      ],
+      "id": "14bc80f7-b5e7-47d2-9aec-02db4be39148",
+      "name": "Webhook",
+      "webhookId": "90e7064d-a9c4-451e-be35-2562b4de6bdc"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"name\": \"={{ $json.name }}\",\n  \"dob\": \"={{ $json.dob }}\",\n  \"gender\": \"={{ $json.gender }}\",\n  \"idNumber\": \"={{ $json.idNumber }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1024,
+        -16
+      ],
+      "id": "1e26c018-4068-47ff-ba63-009ceba8d03f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/aadhaar.png",
+        "dataPropertyName": "file0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -16
+      ],
+      "id": "84851400-aaa4-4004-bb64-10ede136943e",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ocr.space/parse/image",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "file0"
+            },
+            {
+              "name": "apikey",
+              "value": "helloworld"
+            },
+            {
+              "name": "language",
+              "value": "eng"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        544,
+        -16
+      ],
+      "id": "d57bc5f0-fce8-4cc2-9376-c42a02e55e9a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.ParsedResults[0].ParsedText;\n\n// Extract Aadhaar number (12 digits)\nconst idMatch = text.match(/\\d{4}\\s\\d{4}\\s\\d{4}/);\n\n// Extract gender (Male/Female)\nconst genderMatch = text.match(/\\b(Male|Female|MALE|FEMALE)\\b/i);\n\n// Extract name (line after \"Aadhaar\")\nlet name = \"\";\nconst lines = text.split(\"\\n\").map(l => l.trim()).filter(l => l.length > 0);\n\n// Find line with person name:\nfor (let i = 0; i < lines.length; i++) {\n    if (lines[i].toLowerCase().includes(\"aadhaar\")) continue; // skip title line\n    if (/male|female/i.test(lines[i])) continue; // skip gender line\n    if (/\\d{4}\\s\\d{4}\\s\\d{4}/.test(lines[i])) continue; // skip ID line\n    if (lines[i].toLowerCase().includes(\"india\")) continue; // skip country line\n    \n    name = lines[i];\n    break;\n}\n\nreturn {\n  json: {\n    name: name,\n    dob: \"\", // not available in your OCR\n    gender: genderMatch ? genderMatch[1] : \"\",\n    idNumber: idMatch ? idMatch[0] : \"\",\n    raw: text\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        -16
+      ],
+      "id": "ee2c362f-30fe-4983-a59b-a9f4a1e4cc82",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a6e1c9c5-43bf-4ebf-8fcf-b1a3b87c43e6",
+  "meta": {
+    "instanceId": "17e40681c772b509b30aef83269134b15b6ff5d23484c616ebb04d5628e25576"
+  },
+  "id": "uPUo0b3u0DAhm1ZB",
+  "tags": []
+}
