@@ -1,0 +1,171 @@
+/* style.css – modern glass‑morphism UI */
+
+/* Global reset and typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 1rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(45deg, #ff6b6b, #f7d794);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.file-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.file-input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.file-input:focus {
+  outline: none;
+  border-color: #ff6b6b;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(45deg, #ff6b6b, #f7d794);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.result {
+  margin-top: 1.5rem;
+  text-align: left;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.subtitle {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  color: #ffdd57;
+}
+
+.field {
+  margin: 0.4rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.value {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Form Input Styles */
+.input-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.text-input {
+  width: 100%;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 0.4rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.text-input[readonly] {
+  cursor: default;
+  opacity: 0.9;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aadhar Upload & Auto‑Fill</title>
+    <meta name="description" content="Upload an Aadhar card image, send it to n8n for OCR extraction and automatically fill the extracted details.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <main class="container">
+        <section class="card">
+            <h1 class="title">Aadhar OCR Auto‑Fill</h1>
+            <form id="uploadForm" class="form" enctype="multipart/form-data">
+                <label for="aadharFile" class="file-label">Select Aadhar Image</label>
+                <input type="file" name="file">
+                <button type="submit" class="btn">Upload & Extract</button>
+            </form>
+            <div id="result" class="result">
+                <h2 class="subtitle">Details Form</h2>
+                <div class="input-group">
+                    <label for="name" class="label">Name</label>
+                    <input type="text" id="name" class="text-input" placeholder="Name will appear here..." readonly />
+                </div>
+                <div class="input-group">
+                    <label for="dob" class="label">Date of Birth</label>
+                    <input type="text" id="dob" class="text-input" placeholder="DOB will appear here..." readonly />
+                </div>
+                <div class="input-group">
+                    <label for="gender" class="label">Gender</label>
+                    <input type="text" id="gender" class="text-input" placeholder="Gender will appear here..." readonly />
+                </div>
+                <div class="input-group">
+                    <label for="idNumber" class="label">ID Number</label>
+                    <input type="text" id="idNumber" class="text-input" placeholder="ID Number will appear here..." readonly />
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
